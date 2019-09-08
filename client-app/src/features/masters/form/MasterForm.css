@@ -1,0 +1,4 @@
+#masterForm {
+    display: flex;
+    flex-direction: column;
+}
