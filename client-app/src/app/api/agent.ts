@@ -13,7 +13,7 @@ const requests = {
 }
 
 const Masters = {
-    list: () => requests.get('/masters'),
+    list: (): Promise<IMaster[]> => requests.get('/masters'),
     details: (id: number) => requests.get(`/masters/${id}`),
     create: (master: IMaster) => requests.post('/masters', master),
     update: (master: IMaster) => requests.put(`/masters/${master.id}`, master),

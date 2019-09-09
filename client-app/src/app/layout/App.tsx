@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
 import { Container } from 'semantic-ui-react';
 import { IMaster } from '../models/master';
 import NavBar from '../../features/nav/NavBar';
 import MasterDashboard from '../../features/masters/dashboard/MasterDashboard';
+import agent from '../api/agent';
 
 const App = () => {
   const [masters, setMasters] = useState<IMaster[]>([]);
@@ -22,9 +22,12 @@ const App = () => {
   }
 
   const handleCreateMaster = (master: IMaster) => {
-    setMasters([...masters, master]);
-    setSelectedMaster(master);
-    setEditMode(false);
+    console.log('Created master: ', master);
+    agent.Masters.create(master).then(() => {
+      setMasters([...masters, master]);
+      setSelectedMaster(master);
+      setEditMode(false);
+    });
   }
 
   const handleEditMaster = (master: IMaster) => {
@@ -38,15 +41,15 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios.get<IMaster[]>('http://localhost:5000/api/masters')
-      .then((rsp) => {
+    agent.Masters.list()
+      .then((response) => {
         let masters: IMaster[] = [];
-        rsp.data.forEach(master => {
+        response.forEach(master => {
           master.birthDate = master.birthDate.split('.')[0];
           masters.push(master);
         });
 
-        setMasters(rsp.data)
+        setMasters(response)
       });
   }, []);
 

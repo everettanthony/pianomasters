@@ -10,5 +10,5 @@ export interface IMaster {
     deathDateFormatted: string;
     bio: string;
     photo: string;
-    isActive: string;
+    isActive: boolean;  
 }

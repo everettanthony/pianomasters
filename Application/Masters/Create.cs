@@ -35,14 +35,13 @@ namespace Application.Masters
             {
                 var master = new Master 
                 {
-                    Id = request.Id,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     BirthDate = request.BirthDate,
                     DeathDate = request.DeathDate,
                     Bio = request.Bio,
                     Photo = request.Photo,
-                    IsActive = request.IsActive,
+                    IsActive = true,
                     CreateDate = DateTime.Now
                 };
 

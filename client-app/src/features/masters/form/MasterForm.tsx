@@ -35,7 +35,7 @@ const MasterForm: React.FC<IProps> = ({
                 deathDateFormatted: '',
                 bio: '',
                 photo: '',
-                isActive: ''
+                isActive: true 
             }
         }
     }
@@ -43,10 +43,9 @@ const MasterForm: React.FC<IProps> = ({
     const [master, setMaster] = useState<IMaster>(initializeForm);
 
     const handleSubmit = () => {
-        if (master.id < 1) {
+        if (master.id < 0 || master.id === null) {
             let newMaster = {
-                ...master,
-                id: -1
+                ...master
             }
             createMaster(newMaster);
         }   
@@ -58,6 +57,7 @@ const MasterForm: React.FC<IProps> = ({
 
     const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = event.currentTarget;
+        master.fullName = master.firstName + ' ' + master.lastName;
 
         setMaster({
             ...master,
