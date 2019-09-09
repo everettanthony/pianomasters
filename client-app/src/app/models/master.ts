@@ -11,4 +11,5 @@ export interface IMaster {
     bio: string;
     photo: string;
     isActive: boolean;  
+    createDate: string;
 }

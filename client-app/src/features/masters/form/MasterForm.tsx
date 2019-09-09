@@ -1,24 +1,20 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useContext } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import './MasterForm.css';
 import { IMaster } from '../../../app/models/master';
+import MasterStore from '../../../app/stores/masterStore';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
-    setEditMode: (editMode: boolean) => void;
     master: IMaster;
-    createMaster: (master: IMaster) => void;
-    editMaster: (master: IMaster) => void;
-    submitting: boolean;
 }
 
 const MasterForm: React.FC<IProps> = ({
-    setEditMode, 
-    master: 
-    initialFormState,
-    createMaster,
-    editMaster,
-    submitting
+    master: initialFormState,
+
 }) => {
+    const masterStore = useContext(MasterStore);
+    const {createMaster, editMaster, submitting, cancelFormOpen} = masterStore;
     const initializeForm = () => {
         if (initialFormState) {
             return initialFormState;
@@ -37,7 +33,8 @@ const MasterForm: React.FC<IProps> = ({
                 deathDateFormatted: '',
                 bio: '',
                 photo: '',
-                isActive: true 
+                isActive: true ,
+                createDate: ''
             }
         }
     }
@@ -60,11 +57,7 @@ const MasterForm: React.FC<IProps> = ({
     const handleInputChange = (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value} = event.currentTarget;
         master.fullName = master.firstName + ' ' + master.lastName;
-
-        setMaster({
-            ...master,
-            [name]: value
-        })
+        setMaster({ ...master, [name]: value });
     }
 
     return (
@@ -79,7 +72,7 @@ const MasterForm: React.FC<IProps> = ({
                 <Form.Input onChange={handleInputChange} name="photo" placeholder='Photo' value={master.photo} />
                 {/* <Form.Checkbox label='Is Active?' value={master.isActive} /> */}
                 <Button.Group widths={2}>
-                    <Button onClick={() => setEditMode(false)}  basic color='grey' content='Cancel' type="button"></Button>
+                    <Button onClick={cancelFormOpen}  basic color='grey' content='Cancel' type="button"></Button>
                     <Button loading={submitting} basic color='blue' content='Submit' type="submit"></Button>
                 </Button.Group>
             </Form>
@@ -87,4 +80,4 @@ const MasterForm: React.FC<IProps> = ({
     )
 }
 
-export default MasterForm;
+export default observer(MasterForm);

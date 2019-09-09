@@ -1,26 +1,15 @@
-import React, { Fragment, SyntheticEvent } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Card, Button } from 'semantic-ui-react';
-import { IMaster } from '../../../app/models/master';
+import { observer } from 'mobx-react-lite';
+import MasterStore from '../../../app/stores/masterStore';
 
-interface IProps {
-    masters: IMaster[],
-    selectMaster: (id: number) => void;
-    deleteMaster: (e: SyntheticEvent<HTMLButtonElement>, id: number) => void;
-    submitting: boolean;
-    target: string;
-}
-
-const MasterList: React.FC<IProps> = ({
-    masters, 
-    selectMaster, 
-    deleteMaster, 
-    submitting,
-    target
-}) => {
+const MasterList: React.FC = () => {
+    const masterStore = useContext(MasterStore);
+    const {mastersById, selectMaster, deleteMaster, submitting, target} = masterStore;
     return (
         <Fragment>
             <Card.Group>
-                { masters.map((master) => (
+                {mastersById.map((master) => ( 
                     <Card key={master.id} style={{width:'100%'}}>
                         <Card.Content>
                             <Card.Header as='a'>{master.fullName}</Card.Header>
@@ -50,4 +39,4 @@ const MasterList: React.FC<IProps> = ({
     )
 }
 
-export default MasterList;
+export default observer(MasterList);

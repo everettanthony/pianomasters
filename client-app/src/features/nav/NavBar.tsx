@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Menu, Container, Button } from 'semantic-ui-react';
 import './NavBar.css';
+import MasterStore from '../../app/stores/masterStore';
+import { observer } from 'mobx-react-lite';
 
-interface IProps {
-    openCreateForm: () => void;
-}
-
-const NavBar:React.FC<IProps> = ({openCreateForm}) => {
+const NavBar:React.FC = () => {
+    const masterStore = useContext(MasterStore);
     return (
         <Menu fixed='top' inverted>
             <Container>
@@ -15,11 +14,11 @@ const NavBar:React.FC<IProps> = ({openCreateForm}) => {
                     Piano Masters
                 </Menu.Item>
                 <Menu.Item>
-                    <Button onClick={openCreateForm} positive content='Add Piano Master'></Button>
+                    <Button onClick={masterStore.openCreateForm} positive content='Add Piano Master'></Button>
                 </Menu.Item>
             </Container>
         </Menu>
     )
 }
 
-export default NavBar;
+export default observer(NavBar);
