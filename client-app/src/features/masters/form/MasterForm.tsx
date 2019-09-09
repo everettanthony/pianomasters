@@ -8,6 +8,7 @@ interface IProps {
     master: IMaster;
     createMaster: (master: IMaster) => void;
     editMaster: (master: IMaster) => void;
+    submitting: boolean;
 }
 
 const MasterForm: React.FC<IProps> = ({
@@ -15,7 +16,8 @@ const MasterForm: React.FC<IProps> = ({
     master: 
     initialFormState,
     createMaster,
-    editMaster
+    editMaster,
+    submitting
 }) => {
     const initializeForm = () => {
         if (initialFormState) {
@@ -78,7 +80,7 @@ const MasterForm: React.FC<IProps> = ({
                 {/* <Form.Checkbox label='Is Active?' value={master.isActive} /> */}
                 <Button.Group widths={2}>
                     <Button onClick={() => setEditMode(false)}  basic color='grey' content='Cancel' type="button"></Button>
-                    <Button basic color='blue' content='Submit' type="submit"></Button>
+                    <Button loading={submitting} basic color='blue' content='Submit' type="submit"></Button>
                 </Button.Group>
             </Form>
         </Segment>

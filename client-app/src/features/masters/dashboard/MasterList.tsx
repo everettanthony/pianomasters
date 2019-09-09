@@ -1,14 +1,22 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, SyntheticEvent } from 'react';
 import { Card, Button } from 'semantic-ui-react';
 import { IMaster } from '../../../app/models/master';
 
 interface IProps {
     masters: IMaster[],
     selectMaster: (id: number) => void;
-    deleteMaster: (id: number) => void;
+    deleteMaster: (e: SyntheticEvent<HTMLButtonElement>, id: number) => void;
+    submitting: boolean;
+    target: string;
 }
 
-const MasterList: React.FC<IProps> = ({masters, selectMaster, deleteMaster}) => {
+const MasterList: React.FC<IProps> = ({
+    masters, 
+    selectMaster, 
+    deleteMaster, 
+    submitting,
+    target
+}) => {
     return (
         <Fragment>
             <Card.Group>
@@ -28,7 +36,9 @@ const MasterList: React.FC<IProps> = ({masters, selectMaster, deleteMaster}) => 
                                     content='View' 
                                     color='blue' />
                                 <Button 
-                                    onClick={() => deleteMaster(master.id)} 
+                                    name={master.id}
+                                    loading={target === master.id.toString() && submitting} 
+                                    onClick={(e) => deleteMaster(e, master.id)} 
                                     floated='right' 
                                     content='Delete' 
                                     color='red' />

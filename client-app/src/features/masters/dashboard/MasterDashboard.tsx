@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { Grid } from 'semantic-ui-react';
 import MasterList from './MasterList';
 import { IMaster } from '../../../app/models/master';
@@ -14,7 +14,9 @@ interface IProps {
     setSelectedMaster: (master: IMaster | null) => void;
     createMaster: (master: IMaster) => void;
     editMaster: (master: IMaster) => void;
-    deleteMaster: (id: number) => void;
+    deleteMaster: (e: SyntheticEvent<HTMLButtonElement>, id: number) => void;
+    submitting: boolean;
+    target: string;
 }
 
 const MasterDashboard: React.FC<IProps> = ({
@@ -26,12 +28,20 @@ const MasterDashboard: React.FC<IProps> = ({
     setSelectedMaster,
     createMaster,
     editMaster,
-    deleteMaster
+    deleteMaster,
+    submitting,
+    target
 }) => {
     return (
         <Grid>
             <Grid.Column width={10}>
-                <MasterList masters={masters} selectMaster={selectMaster} deleteMaster={deleteMaster} />
+                <MasterList 
+                    masters={masters} 
+                    selectMaster={selectMaster} 
+                    deleteMaster={deleteMaster} 
+                    submitting={submitting}
+                    target={target}
+                />
             </Grid.Column>
             <Grid.Column width={6}>
                 { selectedMaster && !editMode && (
@@ -47,6 +57,7 @@ const MasterDashboard: React.FC<IProps> = ({
                         setEditMode={setEditMode}
                         createMaster={createMaster} 
                         editMaster={editMaster}
+                        submitting={submitting}
                     />
                  )}
             </Grid.Column>
