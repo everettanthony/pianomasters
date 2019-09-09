@@ -14,6 +14,7 @@ interface IProps {
     setSelectedMaster: (master: IMaster | null) => void;
     createMaster: (master: IMaster) => void;
     editMaster: (master: IMaster) => void;
+    deleteMaster: (id: number) => void;
 }
 
 const MasterDashboard: React.FC<IProps> = ({
@@ -24,12 +25,13 @@ const MasterDashboard: React.FC<IProps> = ({
     setEditMode,
     setSelectedMaster,
     createMaster,
-    editMaster
+    editMaster,
+    deleteMaster
 }) => {
     return (
         <Grid>
             <Grid.Column width={10}>
-                <MasterList masters={masters} selectMaster={selectMaster} />
+                <MasterList masters={masters} selectMaster={selectMaster} deleteMaster={deleteMaster} />
             </Grid.Column>
             <Grid.Column width={6}>
                 { selectedMaster && !editMode && (
@@ -39,10 +41,13 @@ const MasterDashboard: React.FC<IProps> = ({
                     setSelectedMaster={setSelectedMaster} />
                 )}  
                 { editMode && (
-                    <MasterForm master={selectedMaster!} 
-                                setEditMode={setEditMode}
-                                createMaster={createMaster} 
-                                editMaster={editMaster} />
+                    <MasterForm 
+                        key={(selectedMaster && selectedMaster.id) || 0} 
+                        master={selectedMaster!} 
+                        setEditMode={setEditMode}
+                        createMaster={createMaster} 
+                        editMaster={editMaster}
+                    />
                  )}
             </Grid.Column>
         </Grid>

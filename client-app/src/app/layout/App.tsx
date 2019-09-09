@@ -13,6 +13,7 @@ const App = () => {
 
   const handleSelectMaster = (id: number) => {
     setSelectedMaster(masters.filter(m => m.id === id)[0]);
+    setEditMode(false);
   }
 
   const handleOpenCreateForm = () => {
@@ -32,9 +33,19 @@ const App = () => {
     setEditMode(false);
   }
 
+  const handleDeleteMaster = (id: number) => {
+    setMasters([...masters.filter(m => m.id !== id)])
+  }
+
   useEffect(() => {
     axios.get<IMaster[]>('http://localhost:5000/api/masters')
       .then((rsp) => {
+        let masters: IMaster[] = [];
+        rsp.data.forEach(master => {
+          master.birthDate = master.birthDate.split('.')[0];
+          masters.push(master);
+        });
+
         setMasters(rsp.data)
       });
   }, []);
@@ -52,7 +63,8 @@ const App = () => {
           setEditMode={setEditMode} 
           setSelectedMaster={setSelectedMaster}
           createMaster={handleCreateMaster} 
-          editMaster={handleEditMaster} />
+          editMaster={handleEditMaster} 
+          deleteMaster={handleDeleteMaster} />
         </Container>
       </Container>
     </Fragment>

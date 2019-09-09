@@ -5,9 +5,10 @@ import { IMaster } from '../../../app/models/master';
 interface IProps {
     masters: IMaster[],
     selectMaster: (id: number) => void;
+    deleteMaster: (id: number) => void;
 }
 
-const MasterList: React.FC<IProps> = ({masters, selectMaster}) => {
+const MasterList: React.FC<IProps> = ({masters, selectMaster, deleteMaster}) => {
     return (
         <Fragment>
             <Card.Group>
@@ -26,10 +27,14 @@ const MasterList: React.FC<IProps> = ({masters, selectMaster}) => {
                                     floated='right' 
                                     content='View' 
                                     color='blue' />
+                                <Button 
+                                    onClick={() => deleteMaster(master.id)} 
+                                    floated='right' 
+                                    content='Delete' 
+                                    color='red' />
                         </Card.Content>
                     </Card>
                 ))}
-
             </Card.Group>
         </Fragment>
     )

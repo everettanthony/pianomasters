@@ -71,8 +71,8 @@ const MasterForm: React.FC<IProps> = ({
                 <Form.Input onChange={handleInputChange} name="firstName" placeholder='First Name' value={master.firstName} />
                 <Form.Input onChange={handleInputChange} name="lastName" placeholder='Last Name' value={master.lastName} />
                 <Form.Input onChange={handleInputChange} name="birthPlace" placeholder='Birth Place' value={master.birthPlace} />
-                <Form.Input onChange={handleInputChange} name="birthDate" placeholder='Birth Date' value={master.birthDate} />
-                <Form.Input onChange={handleInputChange} name="deathDate" placeholder='Date of Death' value={master.deathDate} />
+                <Form.Input onChange={handleInputChange} type="datetime-local" name="birthDate" placeholder='Birth Date' value={master.birthDate} />
+                <Form.Input onChange={handleInputChange} type="datetime-local" name="deathDate" placeholder='Date of Death' value={master.deathDate} />
                 <Form.TextArea rows={4} onChange={handleInputChange} name="bio" placeholder='Bio' value={master.bio} />
                 <Form.Input onChange={handleInputChange} name="photo" placeholder='Photo' value={master.photo} />
                 {/* <Form.Checkbox label='Is Active?' value={master.isActive} /> */}

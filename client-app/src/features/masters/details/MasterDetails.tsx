@@ -8,9 +8,7 @@ interface IProps {
     setSelectedMaster: (master: IMaster | null) => void;
 }
 
-const MasterDetails: React.FC<IProps> = ({master, setEditMode, setSelectedMaster}) => {
-    window.scrollTo(0, 0);
-    
+const MasterDetails: React.FC<IProps> = ({master, setEditMode, setSelectedMaster}) => { 
     return (
         <Card fluid>
             <Image src={master.photo} wrapped ui={false} />
