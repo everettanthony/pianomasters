@@ -14,11 +14,18 @@ class MasterStore {
     @observable submitting = false;
     @observable target = '';
 
+    // Sort by Id
     @computed get mastersById() {
-      console.log(this.masterRegistry);
         return Array.from(this.masterRegistry.values()).sort(
           (a, b) => a.id - b.id
         );
+    }
+
+    // Sort by Date
+    @computed get mastersByDate() {
+      return Array.from(this.masterRegistry.values()).sort(
+        (a, b) => Date.parse(a.createDate) - Date.parse(b.createDate)
+      );
     }
 
     @action loadMasters = async () => {
@@ -39,7 +46,7 @@ class MasterStore {
             runInAction('load piano masters error', () => {
               this.loadingInitial = false;
             });
-        }
+        } 
     }
 
     @action createMaster = async (master: IMaster) => {

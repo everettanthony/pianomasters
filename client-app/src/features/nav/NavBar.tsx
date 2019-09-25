@@ -14,7 +14,9 @@ const NavBar:React.FC = () => {
                     Piano Masters
                 </Menu.Item>
                 <Menu.Item>
-                    <Button onClick={masterStore.openCreateForm} positive content='Add Piano Master'></Button>
+                    <Button onClick={masterStore.openCreateForm} 
+                            positive 
+                            content='Add Piano Master'/>
                 </Menu.Item>
             </Container>
         </Menu>
