@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -21,6 +24,18 @@ namespace Application.Masters
             public bool? IsActive { get; set; }
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.FirstName).NotEmpty();
+                RuleFor(x => x.LastName).NotEmpty();
+                RuleFor(x => x.BirthPlace).NotEmpty();
+                RuleFor(x => x.Bio).NotEmpty();
+                RuleFor(x => x.Photo).NotEmpty();
+            }
+        }
+
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
@@ -34,7 +49,7 @@ namespace Application.Masters
                 var master = await _context.Masters.FindAsync(request.Id);
 
                 if (master == null)
-                    throw new Exception("No Piano Master Found.");
+                    throw new RestException(HttpStatusCode.NotFound, new {master = "Not found"});
 
                 master.FirstName = request.FirstName ?? master.FirstName;    
                 master.LastName = request.LastName ?? master.LastName;    

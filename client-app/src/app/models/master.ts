@@ -1,15 +1,14 @@
 export interface IMaster {
-    id: number;
+    id: any;
     firstName: string;
     lastName: string;
-    fullName: string;
+    fullName?: string;
     birthPlace: string;
     birthDate: string;
-    birthDateFormatted: string;
+    birthDateFormatted?: string;
     deathDate: string;
-    deathDateFormatted: string;
+    deathDateFormatted?: string;
     bio: string;
     photo: string;
-    isActive: boolean;  
-    createDate: string;
+    isActive?: boolean;
 }

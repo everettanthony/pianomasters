@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -12,15 +14,36 @@ namespace Application.Masters
         public class Command : IRequest
         {
             public int Id { get; set; }
+
             public string FirstName { get; set;}
+
             public string LastName { get; set;}
+
             public string BirthPlace { get; set;}
+
             public DateTime? BirthDate { get; set;}
+
             public DateTime? DeathDate { get; set;}
+
             public string Bio { get; set; }
+
             public string Photo { get; set; }
+
             public bool IsActive { get; set; }
+
             public DateTime CreateDate { get; set;}
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.FirstName).NotEmpty();
+                RuleFor(x => x.LastName).NotEmpty();
+                RuleFor(x => x.BirthPlace).NotEmpty();
+                RuleFor(x => x.Bio).NotEmpty();
+                RuleFor(x => x.Photo).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Command>

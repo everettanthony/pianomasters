@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -25,7 +27,7 @@ namespace Application.Masters
                 {
                     var master = await _context.Masters.FindAsync(request.Id); 
                     if (master == null)
-                        throw new Exception("No Piano Master Found.");
+                        throw new RestException(HttpStatusCode.NotFound, new {master = "Not found"});
 
                     _context.Remove(master);
 

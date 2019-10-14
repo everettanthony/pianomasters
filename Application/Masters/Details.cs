@@ -4,6 +4,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Persistence;
+using Application.Errors;
+using System.Net;
 
 namespace Application.Masters
 {
@@ -24,9 +26,12 @@ namespace Application.Masters
 
             public async Task<Master> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Masters.FindAsync(request.Id);
+                var master = await _context.Masters.FindAsync(request.Id);
 
-                return activity;
+                if (master == null)
+                    throw new RestException(HttpStatusCode.NotFound, new {master = "Not found"});
+
+                return master;
             }
         }
     }

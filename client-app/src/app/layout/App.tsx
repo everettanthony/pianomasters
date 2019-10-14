@@ -1,30 +1,43 @@
-import React, { useEffect, Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import MasterDashboard from '../../features/masters/dashboard/MasterDashboard';
-import LoaderComponent from './loader/LoaderComponent';
-import MasterStore from '../stores/masterStore';
 import { observer } from 'mobx-react-lite';
+import { Route, withRouter, RouteComponentProps, Switch } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
+import MasterForm from '../../features/masters/form/MasterForm';
+import MasterDetails from '../../features/masters/details/MasterDetails';
+import NotFound from './NotFound';
+import { ToastContainer } from 'react-toastify';
 
-const App = () => {
-  const masterStore = useContext(MasterStore);
-
-  useEffect(() => {
-    masterStore.loadMasters();
-  }, [masterStore]);
-
-  if (masterStore.loadingInitial) return <LoaderComponent content='Loading the piano masters...' />
+const App: React.FC<RouteComponentProps> = ({ location }) => {
 
   return (
     <Fragment>
-      <Container fluid>
-        <NavBar />
-        <Container style={{marginTop:'6em'}}>
-        <MasterDashboard />
-        </Container>
-      </Container>
+      <ToastContainer position='bottom-right'/>
+      <Route exact path='/' component={HomePage} />
+      <Route
+        path={'/(.+)'}
+        render={() => (
+          <Fragment>
+            <NavBar />
+            <Container style={{ marginTop: '7em' }}>
+              <Switch>
+                <Route exact path='/masters' component={MasterDashboard} />
+                <Route path='/masters/:id' component={MasterDetails} />
+                <Route
+                  key={location.key}
+                  path={['/create', '/manage/:id']}
+                  component={MasterForm}
+                />
+                <Route component={NotFound} />
+              </Switch>
+            </Container>
+          </Fragment>
+        )}
+      />
     </Fragment>
   );
-}
+};
 
-export default observer(App);
+export default withRouter(observer(App));
