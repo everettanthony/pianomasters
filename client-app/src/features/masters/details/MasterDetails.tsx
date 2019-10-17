@@ -14,25 +14,20 @@ interface DetailParams {
 }
 
 const MasterDetails: React.FC<RouteComponentProps<DetailParams>> = ({
-    match, 
+    match,
     history
 }) => { 
     const masterStore = useContext(MasterStore);
-    const {
-        master, 
-        loadMaster, 
-        loadingInitial
-    } = masterStore;
+    const { master, loadMaster, loadingInitial } = masterStore;
 
     useEffect(() => {
         loadMaster(match.params.id);
-    }, [loadMaster, match.params.id]);
+    }, [loadMaster, match.params.id, history]);
 
     if (loadingInitial) 
         return <LoaderComponent content='Loading piano master...' />;
 
-    if (!master)
-        return <h2>Piano Master not found.</h2>;
+    if (!master) return <h2>Piano Master not found.</h2>;
 
     return (
         <Grid>

@@ -21,7 +21,7 @@ const MasterDetailedInfo:React.FC<{master: IMaster}> = ({master}) => {
                         <Icon name='calendar' size='large' color='teal' />
                     </Grid.Column>
                     <Grid.Column width={15}>
-                        <span>{master.birthDate}</span>
+                        <span>{master.birthDateFormatted}</span>
                     </Grid.Column>
                 </Grid>
             </Segment>

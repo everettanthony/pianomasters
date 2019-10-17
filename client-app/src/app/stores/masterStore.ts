@@ -2,6 +2,7 @@ import { observable, action, computed, configure, runInAction } from 'mobx';
 import { createContext, SyntheticEvent } from 'react';
 import { IMaster } from '../models/master';
 import agent from '../api/agent';
+import { history } from '../..';
 
 configure({enforceActions: 'always'});
 
@@ -27,11 +28,11 @@ class MasterStore {
   // Group By Date
   groupMastersByDate(masters: IMaster[]) {
     const sortedMasters = masters.sort(
-      (a, b) => Date.parse(a.birthDate) - Date.parse(b.birthDate)
+      (a, b) => a.birthDate.getTime() - b.birthDate.getTime()
     );
 
     return Object.entries(sortedMasters.reduce((masters, master) => {
-      const birthDate = master.birthDate.split('T')[0];
+      const birthDate = master.birthDate.toISOString().split('T')[0];
       masters[birthDate] = masters[birthDate] ? [...masters[birthDate], master] : [master];
       return masters;
     }, {} as {[key: string]: IMaster[]}));
@@ -43,14 +44,13 @@ class MasterStore {
       const masters = await agent.Masters.list();
       runInAction('loading piano masters', () => {
         masters.forEach(master => {
-          master.birthDate = master.birthDate.split('.')[0];
+          master.birthDate = new Date(master.birthDate);
           this.masterRegistry.set(master.id, master);
         });
         this.loadingInitial = false;
       })
-
     } catch (error) {
-      runInAction('load piano masters error', () => {
+      runInAction('piano masters load error', () => {
         this.loadingInitial = false;
       })
     }
@@ -60,16 +60,20 @@ class MasterStore {
     let master = this.getMaster(id);
     if (master) {
       this.master = master;
+      return master;
     } else {
       this.loadingInitial = true;
       try {
         master = await agent.Masters.details(id);
-        runInAction('getting piano master',() => {
+        runInAction('loading piano master',() => {
+          master.birthDate = new Date(master.birthDate);
           this.master = master;
+          this.masterRegistry.set(master.id, master);
           this.loadingInitial = false;
         })
+        return master;
       } catch (error) {
-        runInAction('get piano master error', () => {
+        runInAction('piano master loading error', () => {
           this.loadingInitial = false;
         })
         console.log(error);
@@ -89,15 +93,16 @@ class MasterStore {
     this.submitting = true;
     try {
       await agent.Masters.create(master);
-      runInAction('create piano master', () => {
+      runInAction('create piano master ', () => {
         this.masterRegistry.set(master.id, master);
         this.submitting = false;
       })
+      history.push(`/masters/${master.id}`)
     } catch (error) {
       runInAction('create piano master error', () => {
         this.submitting = false;
       })
-      console.log(error);
+      console.log(error.response);
     }
   };
 
@@ -105,11 +110,12 @@ class MasterStore {
     this.submitting = true;
     try {
       await agent.Masters.update(master);
-      runInAction('editing piano master', () => {
+      runInAction('editing activity', () => {
         this.masterRegistry.set(master.id, master);
         this.master = master;
         this.submitting = false;
       })
+      history.push(`/masters/${master.id}`)
     } catch (error) {
       runInAction('edit piano master error', () => {
         this.submitting = false;

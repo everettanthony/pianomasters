@@ -11,7 +11,7 @@ const MasterList: React.FC = () => {
         <Fragment>
             <Card.Group>
                 {mastersById.map((master) => ( 
-                    <MasterListItem master={master} key={master.id} />
+                    <MasterListItem key={master.id} master={master} />
                 ))}
             </Card.Group>
         </Fragment>
